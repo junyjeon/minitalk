@@ -6,77 +6,78 @@
 /*   By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:10:55 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/01/31 22:58:50 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/02/05 09:05:46 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <signal.h>
-#include <sys/types.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "minitalk.h"
 
-typedef struct s_data
+static volatile sig_atomic_t g_signal;
+
+void	get_sig(int sig)
 {
-	int	bit;
-	int	pid;
-	int	count;
-	int	dec;
-} t_data;
+	static char	tmp;
+	static int	bit;
 
-t_data g_data;
-
-void	set_data(int pid)
-{
-	
-}
-
-void	sig_usr2(int signum)
-{
-	char	a;
-	
-	(void)signum;
-	g_data.bit[g_data.count] = '1';
-	g_data.count++;
-	if (g_data.count == 8)
+	if (sig == SIGUSR1)
 	{
-		g_data.dec = change_dec(g_data.bit);
-		a = (char)g_data.dec;
-		write(1, &a, 1);
-		g_data.count = 0;
+		tmp = 0;
+		if (bit < 7)
+			tmp <<= 1;
+	}
+	else if (sig == SIGUSR2)
+	{
+		tmp |= 1;
+		if (bit < 7)
+			tmp <<= 1;
+	}
+	bit++;
+	if (bit == 8)
+	{
+		write(1, &tmp, 1);
+		bit = 0;
+		tmp = 0;
 	}
 }
 
-void	sig_usr1(int signum)
+int main(void)
 {
-	char	a;
-	
-	(void)signum;
-	g_data.bit[g_data.count] = '0';
-	g_data.count++;
-	if (g_data.count == 8)
-	{
-		g_data.dec = change_dec(g_data.bit);
-		a = (char)g_data.dec;
-		if (a == '\0')
-			write(1, "\n", 1);
-		else
-			write(1, &a, 1);
-		g_data.count = 0;
-	}
-}
-
-int main()
-{
-	set_data(getpid());
-	if (g_data.pid == 0)
-		return (0);
-	write(1, "pid : ", 6);
-	write(1, g_data.pid, strlen(g_data.pid));
-	write(1, "\n", 1);
-	free(g_data.pid);
-	signal(SIGUSR1, sig_sur1);
-	signal(SIGUSR1, sig_sur2);
+	ft_putstr_fd("sig : ", 1);
+	ft_putnbr_fd(getpid(), 1);
+	ft_putchar_fd("\n", 1);
+	signal(SIGUSR1, get_sig);
+	signal(SIGUSR2, get_sig);
 	while (1)
 		pause();
 	return (0);
 }
+
+str[i] & 1 == 0 { kill(pid, SIGUSR1)}
+str[i] & 1 == 1 { kill(pid, SIGUSR2)}
+
+
+/*
+c : 0000 0001
+            1 |
+	1	
+	c =	c | (1 << i); 
+*/
+
+
+char c = 0;
+if sig == USR2;
+	c = c | 1;
+
+
+/**server's routine*/
+
+
+	sigemptyset(&act.sa_mask);
+	sigaddset(&act.sa_mask, SIGUSR1);//block
+	sigaddset(&act.sa_mask, SIGUSR2);//block
+	act.sa_flags = SA_RESTART;
+	if (sigaction(SIGUSR1, &act, NULL) == - 1)
+		print_error("Error in value. || Error fault.\n");
+	if (sigaction(SIGUSR2, &act, NULL) == - 1)
+		print_error("Error in value. || Error fault.\n");
+	
