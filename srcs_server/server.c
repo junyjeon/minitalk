@@ -6,7 +6,7 @@
 /*   By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:10:55 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/02/10 17:29:35 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/02/10 17:35:53 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ void	handler(int sig, siginfo_t *info, void *context)
 	bit++;
 	if (bit == 8)
 	{
-		if (tmp == (char)127)
-				
-		else
-			write(1, &tmp, 1);
+		write(1, &tmp, 1);
 		bit = 0;
 		tmp = 0;
 	}
