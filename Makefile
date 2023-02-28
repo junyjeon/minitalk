@@ -6,11 +6,11 @@
 #    By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/12 21:52:21 by junyojeo          #+#    #+#              #
-#    Updated: 2023/02/10 16:53:32 by junyojeo         ###   ########.fr        #
+#    Updated: 2023/02/28 16:04:41 by junyojeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS			=	-Wall -Werror -Wextra
+CFLAGS			=	-Wall -Werror -Wextra -g3
 LIB				=	./libft
 
 SRC_CLIENT		=	srcs_client/client.c

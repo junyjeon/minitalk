@@ -6,7 +6,7 @@
 /*   By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:41:40 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/02/28 14:59:58 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:13:30 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ void	get_str(int pid, char *str)
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
+	int		i;
 
-	if (argc != 3)
+	if (argc < 3)
 		print_error("Wrong number of Argument\n");
 	pid = ft_atoi(argv[1]);
 	if (pid < 100 || pid > 99998)
 		print_error("Invalid pid.\n");
-	get_str(pid, argv[2]);
+	i = 1;
+	while (++i < argc)
+		get_str(pid, argv[i]);
 	return (0);
 }

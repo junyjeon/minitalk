@@ -6,7 +6,7 @@
 /*   By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:10:55 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/02/28 15:02:03 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/02/28 15:09:01 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	handler(int sig, siginfo_t *info, void *context)
 {
 	static char	tmp;
 	static int	bit;
-	static int	arr[];
 
 	(void)info;
 	(void)context;
