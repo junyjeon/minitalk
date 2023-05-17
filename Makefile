@@ -3,46 +3,56 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/12 21:52:21 by junyojeo          #+#    #+#              #
-#    Updated: 2023/02/28 16:04:41 by junyojeo         ###   ########.fr        #
+#    Updated: 2023/05/17 23:07:34 by junyojeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS			=	-Wall -Werror -Wextra -g3
-LIB				=	./libft
+CC= cc
+CFLAGS= -Wall -Wextra -Werror
+RM= rm -rf
+SERVER= server
+CLIENT= client
 
-SRC_CLIENT		=	srcs_client/client.c
-SRC_SERVER		=	srcs_server/server.c
+SERVER_SRCS = server.c utils.c
+CLIENT_SRCS = client.c utils.c
+SERVERB_SRCS = server_bonus.c utils_bonus.c
+CLIENTB_SRCS = client_bonus.c utils_bonus.c
+SERVER_OBJS= $(SERVER_SRCS:.c=.o)
+CLIENT_OBJS= $(CLIENT_SRCS:.c=.o)
+SERVERB_OBJS= $(SERVERB_SRCS:.c=.o)
+CLIENTB_OBJS= $(CLIENTB_SRCS:.c=.o)
 
-OBJS_CLIENT		=	$(SRC_CLIENT:.c=.o)
-OBJS_SERVER		=	$(SRC_SERVER:.c=.o)
+ifdef WITH_BONUS
+        SERVER_FILES = $(SERVERB_OBJS)
+        CLIENT_FILES = $(CLIENTB_OBJS)
+else
+        SERVER_FILES = $(SERVER_OBJS)
+        CLIENT_FILES = $(CLIENT_OBJS)
+endif
 
-DEPS_CLIENT 	= 	$(SRC_CLIENT:.c=.d)
-DEPS_SERVER 	= 	$(SRC_SERVER:.c=.d)
+all: $(SERVER) $(CLIENT)
 
-NAME			=	server client
+$(SERVER): $(SERVER_FILES)
+	@$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_FILES)
+	
+$(CLIENT): $(CLIENT_FILES)
+	@$(CC) $(CFLAGS) -o $(CLIENT) $(CLIENT_FILES)
 
-all				:	$(NAME)
+bonus:
+	@make WITH_BONUS=1 all
+	
+%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
 
-client		:	$(OBJS_CLIENT)
-				make -C $(LIB)
-				$(CC) $(CFLAGS) $(LIB)/libft.a $^ -o $@
+clean:
+	@$(RM) $(SERVER_OBJS) $(SERVERB_OBJS) $(CLIENT_OBJS) $(CLIENTB_OBJS)
 
-server		:	$(OBJS_SERVER)
-				make -C $(LIB)
-				$(CC) $(CFLAGS) $(LIB)/libft.a $^ -o $@
+fclean: clean
+	@$(RM) $(SERVER) $(CLIENT)
 
-clean		:
-				$(RM) ./srcs_client/*.o ./srcs_server/*.o
+re: fclean all
 
-fclean		:	clean
-				$(RM) $(NAME)
-				make fclean -C $(LIB)
-
-re			:	| fclean all
-
-.PHONY		:	all clean fclean re
-
--include $(DEPS_SERVER) $(DEPS_CLIENT)
+.PHONY: all clean fclean re bonus

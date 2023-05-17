@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   bonus_client.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:41:40 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/02/28 16:20:07 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:57:18 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minitalk.h"
+#include "minitalk.h"
 
 void	print_error(char *str)
 {
@@ -35,7 +35,7 @@ void	send_sig(int pid, char *str, int byte)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(30);
+			usleep(300);
 			bit++;
 		}
 	}
@@ -51,21 +51,28 @@ void	get_str(int pid, char *str)
 		exit(1);
 	byte = ft_strlen(send);
 	send_sig(pid, send, byte);
+	send_sig(pid, "\0", byte);
 	free(send);
+}
+
+void	confirm(int sig)
+{
+	if (sig != SIGUSR1)
+		print_error("Error: Server received message\n");
+	write(1, &"END", 1);
+	exit(0);
 }
 
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
-	int		i;
 
-	if (argc < 3)
+	if (argc != 3)
 		print_error("Wrong number of Argument\n");
+	signal(SIGUSR1, confirm);
 	pid = ft_atoi(argv[1]);
-	if (pid < 100 || pid > 99998)
-		print_error("Invalid pid.\n");
-	i = 1;
-	while (++i < argc)
-		get_str(pid, argv[i]);
+	get_str(pid, argv[2]);
+	while (1)
+		;
 	return (0);
 }

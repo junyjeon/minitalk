@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:12:46 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/02/10 16:50:16 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/17 23:06:47 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@
 # include <signal.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include "../libft/libft.h"
+
+size_t	ft_strlen(const char *str);
+void	ft_putchar(char c);
+void	ft_putstr(char *str);
+void	ft_putnbr(unsigned int n);
+int     ft_atoi(const char *str);
+char	*ft_strjoin(char const *s1, char const *s2);
+void	print_error(char *str);
 
 #endif

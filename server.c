@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: junyojeo <junyojeo@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:10:55 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/02/28 15:09:01 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/17 23:01:46 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minitalk.h"
+#include "minitalk.h"
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putstr(char *str)
+{
+	while (*str)
+		write(1, str++, 1);
+}
+
+void	ft_putnbr(unsigned int n)
+{
+	if (n > 9)
+		ft_putnbr(n / 10);
+	ft_putchar((n % 10) + '0');
+}
 
 void	handler(int sig, siginfo_t *info, void *context)
 {
@@ -34,6 +52,8 @@ void	handler(int sig, siginfo_t *info, void *context)
 	bit++;
 	if (bit == 8)
 	{
+		if (tmp == '\0')
+			kill(info->si_pid, SIGUSR1);
 		write(1, &tmp, 1);
 		bit = 0;
 		tmp = 0;
@@ -48,9 +68,9 @@ int	main(void)
 	act.sa_flags = SA_SIGINFO;
 	sigaddset(&act.sa_mask, SIGUSR1);
 	sigaddset(&act.sa_mask, SIGUSR2);
-	ft_putstr_fd("sig : ", 1);
-	ft_putnbr_fd(getpid(), 1);
-	ft_putchar_fd('\n', 1);
+	ft_putstr("sig : ");
+	ft_putnbr(getpid());
+	ft_putchar('\n');
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
 	while (1)
