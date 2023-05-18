@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minitalk.h                                         :+:      :+:    :+:   */
+/*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/31 22:12:46 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/05/18 17:43:20 by junyojeo         ###   ########.fr       */
+/*   Created: 2023/05/18 17:30:27 by junyojeo          #+#    #+#             */
+/*   Updated: 2023/05/18 17:40:26 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINITALK_H
-# define MINITALK_H
+#include "minitalk.h"
 
-# include <signal.h>
-# include <unistd.h>
-# include <stdlib.h>
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
 
-size_t	ft_strlen(const char *str);
-void	ft_putchar(char c);
-void	ft_putstr(char *str);
-void	ft_putnbr(unsigned int n);
-int		ft_atoi(const char *str);
-char	*ft_strjoin(char const *s1, char const *s2);
+void	ft_putstr(char *str)
+{
+	while (*str)
+		write(1, str++, 1);
+}
 
-#endif
+void	ft_putnbr(unsigned int n)
+{
+	if (n > 9)
+		ft_putnbr(n / 10);
+	ft_putchar((n % 10) + '0');
+}

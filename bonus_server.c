@@ -6,7 +6,7 @@
 /*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:10:55 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/05/17 23:04:40 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/18 17:23:28 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,19 +17,6 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-void	ft_putstr(char *str)
-{
-	while (*str)
-		write(1, str++, 1);
-}
-
-void	ft_putnbr(unsigned int n)
-{
-	if (n > 9)
-		ft_putnbr(n / 10);
-	ft_putchar((n % 10) + '0');
-}
-
 void	handler(int sig, siginfo_t *info, void *context)
 {
 	static char	tmp;
@@ -38,17 +25,11 @@ void	handler(int sig, siginfo_t *info, void *context)
 	(void)info;
 	(void)context;
 	if (sig == SIGUSR1)
-	{
 		tmp |= 0;
-		if (bit < 7)
-			tmp <<= 1;
-	}
 	else if (sig == SIGUSR2)
-	{
 		tmp |= 1;
-		if (bit < 7)
-			tmp <<= 1;
-	}
+	if (bit < 7)
+		tmp <<= 1;
 	bit++;
 	if (bit == 8)
 	{

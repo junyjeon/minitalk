@@ -6,17 +6,11 @@
 /*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:41:40 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/05/17 22:57:18 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/18 17:35:33 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
-
-void	print_error(char *str)
-{
-	ft_putstr_fd(str, 1);
-	exit(1);
-}
 
 void	send_sig(int pid, char *str, int byte)
 {
