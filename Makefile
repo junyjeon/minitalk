@@ -6,7 +6,7 @@
 #    By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/12 21:52:21 by junyojeo          #+#    #+#              #
-#    Updated: 2023/05/18 17:34:40 by junyojeo         ###   ########.fr        #
+#    Updated: 2023/05/19 22:08:06 by junyojeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,10 +36,10 @@ endif
 all: $(SERVER) $(CLIENT)
 
 $(SERVER): $(SERVER_FILES)
-	@$(CC) $(CFLAGS) -o $(SERVER) $(SERVER_FILES)
+	@$(CC) $(CFLAGS) -o $@ $^
 	
 $(CLIENT): $(CLIENT_FILES)
-	@$(CC) $(CFLAGS) -o $(CLIENT) $(CLIENT_FILES)
+	@$(CC) $(CFLAGS) -o $@ $^
 
 bonus:
 	@make WITH_BONUS=1 all

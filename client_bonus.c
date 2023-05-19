@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_client.c                                     :+:      :+:    :+:   */
+/*   client_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:41:40 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/05/18 17:35:33 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/19 22:55:45 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
+#include "minitalk_bonus.h"
 
-void	send_sig(int pid, char *str, int byte)
+static void	send_sig(int pid, char *str, int byte)
 {
 	int	i;
 	int	bit;
@@ -24,7 +24,7 @@ void	send_sig(int pid, char *str, int byte)
 		bit = 0;
 		while (bit < 8)
 		{
-			bit_tmp = str[i] >> (7 - bit) & 1;
+			bit_tmp = (int)(str[i] >> (7 - bit) & 1);
 			if (bit_tmp == 0)
 				kill(pid, SIGUSR1);
 			else
@@ -35,7 +35,7 @@ void	send_sig(int pid, char *str, int byte)
 	}
 }
 
-void	get_str(int pid, char *str)
+static void	get_str(int pid, char *str)
 {
 	int		byte;
 	char	*send;
@@ -49,11 +49,11 @@ void	get_str(int pid, char *str)
 	free(send);
 }
 
-void	confirm(int sig)
+static void	confirm(int sig)
 {
 	if (sig != SIGUSR1)
 		print_error("Error: Server received message\n");
-	write(1, &"END", 1);
+	write(1, &"END POINT!\n", 11);
 	exit(0);
 }
 

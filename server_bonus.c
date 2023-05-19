@@ -1,21 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bonus_server.c                                     :+:      :+:    :+:   */
+/*   server_bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:10:55 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/05/18 17:23:28 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/19 22:55:10 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk.h"
-
-void	ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
+#include "minitalk_bonus.h"
 
 void	handler(int sig, siginfo_t *info, void *context)
 {
@@ -49,9 +44,9 @@ int	main(void)
 	act.sa_flags = SA_SIGINFO;
 	sigaddset(&act.sa_mask, SIGUSR1);
 	sigaddset(&act.sa_mask, SIGUSR2);
-	ft_putstr_fd("sig : ", 1);
-	ft_putnbr_fd(getpid(), 1);
-	ft_putchar_fd('\n', 1);
+	ft_putstr("sig : ");
+	ft_putnbr(getpid());
+	ft_putchar('\n');
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
 	while (1)

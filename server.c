@@ -6,7 +6,7 @@
 /*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/31 22:10:55 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/05/18 17:42:34 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/19 22:02:37 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ void	handler(int sig, siginfo_t *info, void *context)
 	bit++;
 	if (bit == 8)
 	{
-		if (tmp == '\0')
-			kill(info->si_pid, SIGUSR1);
 		write(1, &tmp, 1);
 		bit = 0;
 		tmp = 0;

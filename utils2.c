@@ -6,11 +6,18 @@
 /*   By: junyojeo <junyojeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 17:30:27 by junyojeo          #+#    #+#             */
-/*   Updated: 2023/05/18 17:40:26 by junyojeo         ###   ########.fr       */
+/*   Updated: 2023/05/19 21:44:55 by junyojeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
+
+void	print_error(char *str)
+{
+	while (*str)
+		write(1, str++, 1);
+	exit(1);
+}
 
 void	ft_putchar(char c)
 {
