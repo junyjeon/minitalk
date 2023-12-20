@@ -48,7 +48,6 @@ void	get_str(int pid, char *str)
 	free(send);
 }
 
-
 int	main(int argc, char **argv)
 {
 	pid_t	pid;
