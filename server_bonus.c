@@ -11,9 +11,11 @@
 /* ************************************************************************** */
 
 #include "minitalk_bonus.h"
+#include "stdio.h"
 
 void	process_multibyte(char *buf, int *buf_i, char byte)
 {
+	printf("byte: %d buf_index: %d\n", byte, *buf_i);
 	buf[*buf_i] = byte;
 	(*buf_i)++;
 	if (is_utf8_char(buf, *buf_i))
@@ -23,12 +25,12 @@ void	process_multibyte(char *buf, int *buf_i, char byte)
 	}
 }
 
-t_Client	*create_cl(t_Client clients[], int max_clients, int cl_pid)
+t_Client	*create_cl(t_Client clients[], int cl_pid)
 {
 	int	i;
 
 	i = -1;
-	while (++i < max_clients)
+	while (++i < MAX_CLIENTS)
 	{
 		if (clients[i].pid == cl_pid || clients[i].pid == 0)
 		{
@@ -62,6 +64,7 @@ void	handler(int sig, siginfo_t *info, void *context)
 		cl->bit = 0;
 		cl->tmp = 0;
 	}
+	// 시그널 보내주기.
 }
 
 int	main(void)

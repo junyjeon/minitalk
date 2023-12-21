@@ -26,9 +26,13 @@ static void	send_sig(int pid, char *str, int byte)
 		{
 			bit_tmp = (int)(str[i] >> (7 - bit) & 1);
 			if (bit_tmp == 0)
-				kill(pid, SIGUSR1);
+			{
+				if (kill(pid, SIGUSR1) == -1)
+					print_error("Wrong pid");
+			}
 			else
-				kill(pid, SIGUSR2);
+				if (kill(pid, SIGUSR2) == -1)
+					print_error("Wrong pid");
 			usleep(500);
 			bit++;
 		}
@@ -69,6 +73,8 @@ int	main(int argc, char **argv)
 		print_error("Wrong number of Argument\n");
 	signal(SIGUSR1, confirm);
 	pid = ft_atoi(argv[1]);
+	if (pid <= 100 || 100000 <= pid)
+		print_error("PID ERROR");
 	get_str(pid, argv[2]);
 	while (1)
 		usleep(100);
