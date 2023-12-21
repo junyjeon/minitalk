@@ -29,9 +29,14 @@ static void	send_sig(int pid, char *str, int byte)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(300);
+			usleep(500);
 			bit++;
 		}
+	}
+	while (bit--)
+	{
+		kill(pid, SIGUSR1);
+		usleep(500);
 	}
 }
 
@@ -43,9 +48,8 @@ static void	get_str(int pid, char *str)
 	send = ft_strjoin(str, "\n");
 	if (send == NULL)
 		exit(1);
-	byte = ft_strlen(send);
+	byte = (int)ft_strlen(send);
 	send_sig(pid, send, byte);
-	send_sig(pid, "\0", byte);
 	free(send);
 }
 
@@ -53,7 +57,7 @@ static void	confirm(int sig)
 {
 	if (sig != SIGUSR1)
 		print_error("Error: Server received message\n");
-	write(1, &"END POINT!\n", 11);
+	write(1, &"Message transfer successful!\n", 29);
 	exit(0);
 }
 
@@ -67,6 +71,6 @@ int	main(int argc, char **argv)
 	pid = ft_atoi(argv[1]);
 	get_str(pid, argv[2]);
 	while (1)
-		;
+		usleep(100);
 	return (0);
 }

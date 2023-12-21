@@ -12,27 +12,55 @@
 
 #include "minitalk_bonus.h"
 
+void	process_multibyte(char *buf, int *buf_i, char byte)
+{
+	buf[*buf_i] = byte;
+	(*buf_i)++;
+	if (is_utf8_char(buf, *buf_i))
+	{
+		write(1, buf, *buf_i);
+		*buf_i = 0;
+	}
+}
+
+t_Client	*create_cl(t_Client clients[], int max_clients, int cl_pid)
+{
+	int	i;
+
+	i = -1;
+	while (++i < max_clients)
+	{
+		if (clients[i].pid == cl_pid || clients[i].pid == 0)
+		{
+			if (clients[i].pid == 0)
+				clients[i].pid = cl_pid;
+			return (&clients[i]);
+		}
+	}
+	return (NULL);
+}
+
 void	handler(int sig, siginfo_t *info, void *context)
 {
-	static char	tmp;
-	static int	bit;
+	static t_Client	clients[MAX_CLIENTS] = {0};
+	t_Client		*cl;
+	int				cl_pid;
 
-	(void)info;
+	cl_pid = info->si_pid;
+	cl = create_cl(clients, MAX_CLIENTS, cl_pid);
 	(void)context;
-	if (sig == SIGUSR1)
-		tmp |= 0;
-	else if (sig == SIGUSR2)
-		tmp |= 1;
-	if (bit < 7)
-		tmp <<= 1;
-	bit++;
-	if (bit == 8)
+	if (sig == SIGUSR2)
+		cl->tmp |= 1;
+	if (cl->bit < 7)
+		cl->tmp <<= 1;
+	cl->bit++;
+	if (cl->bit == 8)
 	{
-		if (tmp == '\0')
+		if (cl->tmp == '\0')
 			kill(info->si_pid, SIGUSR1);
-		write(1, &tmp, 1);
-		bit = 0;
-		tmp = 0;
+		process_multibyte(cl->buf, &(cl->buf_i), cl->tmp);
+		cl->bit = 0;
+		cl->tmp = 0;
 	}
 }
 
@@ -50,6 +78,6 @@ int	main(void)
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
 	while (1)
-		;
+		usleep(100);
 	return (0);
 }

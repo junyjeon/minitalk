@@ -19,9 +19,7 @@ void	handler(int sig, siginfo_t *info, void *context)
 
 	(void)info;
 	(void)context;
-	if (sig == SIGUSR1)
-		tmp |= 0;
-	else if (sig == SIGUSR2)
+	if (sig == SIGUSR2)
 		tmp |= 1;
 	if (bit < 7)
 		tmp <<= 1;
@@ -48,6 +46,6 @@ int	main(void)
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
 	while (1)
-		;
+		usleep(100);
 	return (0);
 }

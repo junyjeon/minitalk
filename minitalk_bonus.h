@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+# define MAX_CLIENTS 10
+
 size_t	ft_strlen(const char *str);
 void	ft_putchar(char c);
 void	ft_putstr(char *str);
@@ -24,5 +26,16 @@ void	ft_putnbr(unsigned int n);
 int		ft_atoi(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	print_error(char *str);
+int		get_utf8_length(char byte);
+int		is_utf8_char(const char *buf, int buf_i);
+
+typedef struct s_Client
+{
+	int		pid;
+	int		tmp;
+	int		bit;
+	char	buf[4];
+	int		buf_i;
+}	t_Client;
 
 #endif

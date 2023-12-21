@@ -29,7 +29,7 @@ static void	send_sig(int pid, char *str, int byte)
 				kill(pid, SIGUSR1);
 			else
 				kill(pid, SIGUSR2);
-			usleep(300);
+			usleep(500);
 			bit++;
 		}
 	}
@@ -46,6 +46,7 @@ void	get_str(int pid, char *str)
 	byte = (int)ft_strlen(send);
 	send_sig(pid, send, byte);
 	free(send);
+	exit(0);
 }
 
 int	main(int argc, char **argv)
@@ -57,6 +58,6 @@ int	main(int argc, char **argv)
 	pid = ft_atoi(argv[1]);
 	get_str(pid, argv[2]);
 	while (1)
-		;
+		usleep(100);
 	return (0);
 }
