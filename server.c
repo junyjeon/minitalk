@@ -16,9 +16,16 @@ void	handler(int sig, siginfo_t *info, void *context)
 {
 	static char	tmp;
 	static int	bit;
+	static int	cl_pid = 0;
+	static int 	working_signal = 0;
 
 	(void)info;
 	(void)context;
+	if (working_signal != 0 && cl_pid != 0 && cl_pid != info->si_pid)
+	{
+		kill(info->si_pid, SIGUSR2);
+		return ;
+	}
 	if (sig == SIGUSR2)
 		tmp |= 1;
 	if (bit < 7)
@@ -26,10 +33,14 @@ void	handler(int sig, siginfo_t *info, void *context)
 	bit++;
 	if (bit == 8)
 	{
+		kill(info->si_pid, SIGUSR1);
+		working_signal = 0;
+		cl_pid = 0;
 		write(1, &tmp, 1);
 		bit = 0;
 		tmp = 0;
 	}
+	kill(info->si_pid, SIGUSR1);
 }
 
 int	main(void)

@@ -36,3 +36,13 @@ void	ft_putnbr(unsigned int n)
 		ft_putnbr(n / 10);
 	ft_putchar((n % 10) + '0');
 }
+
+void	*ft_memset(void *s, int c, size_t n)
+{
+	unsigned char	*dst;
+
+	dst = (unsigned char *)s;
+	while (n-- > 0)
+		*dst++ = (unsigned char)c;
+	return ((void *)s);
+}

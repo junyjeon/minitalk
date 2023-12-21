@@ -12,11 +12,13 @@
 
 #include "minitalk_bonus.h"
 
+int	g_flag;
+
 static void	send_sig(int pid, char *str, int byte)
 {
 	int	i;
 	int	bit;
-	int	bit_tmp;
+	int	tmp;
 
 	i = -1;
 	while (++i < byte)
@@ -24,8 +26,11 @@ static void	send_sig(int pid, char *str, int byte)
 		bit = 0;
 		while (bit < 8)
 		{
-			bit_tmp = (int)(str[i] >> (7 - bit) & 1);
-			if (bit_tmp == 0)
+			if (g_flag == 1)
+				break ;
+			g_flag = 1;
+			tmp = (int)(str[i] >> (7 - bit) & 1);
+			if (tmp == 0)
 			{
 				if (kill(pid, SIGUSR1) == -1)
 					print_error("Wrong pid");
@@ -33,18 +38,13 @@ static void	send_sig(int pid, char *str, int byte)
 			else
 				if (kill(pid, SIGUSR2) == -1)
 					print_error("Wrong pid");
-			usleep(500);
-			bit++;
+			++bit;
+			usleep(1);
 		}
-	}
-	while (bit--)
-	{
-		kill(pid, SIGUSR1);
-		usleep(500);
 	}
 }
 
-static void	get_str(int pid, char *str)
+static void	post_str(int pid, char *str)
 {
 	int		byte;
 	char	*send;
@@ -54,15 +54,16 @@ static void	get_str(int pid, char *str)
 		exit(1);
 	byte = (int)ft_strlen(send);
 	send_sig(pid, send, byte);
+	send_sig(pid, "\0", 1);
 	free(send);
 }
 
 static void	confirm(int sig)
 {
-	if (sig != SIGUSR1)
-		print_error("Error: Server received message\n");
-	write(1, &"Message transfer successful!\n", 29);
-	exit(0);
+	if (sig == SIGUSR1)
+		g_flag = 0;
+	else if (sig == SIGUSR2)
+		print_error("Error Occurred\n");
 }
 
 int	main(int argc, char **argv)
@@ -72,11 +73,11 @@ int	main(int argc, char **argv)
 	if (argc != 3)
 		print_error("Wrong number of Argument\n");
 	signal(SIGUSR1, confirm);
+	signal(SIGUSR2, confirm);
 	pid = ft_atoi(argv[1]);
 	if (pid <= 100 || 100000 <= pid)
 		print_error("PID ERROR");
-	get_str(pid, argv[2]);
-	while (1)
-		usleep(100);
+	post_str(pid, argv[2]);
+	write(1, &"Message transfer successful!\n", 29);
 	return (0);
 }

@@ -11,7 +11,8 @@
 # **************************************************************************** #
 
 CC= cc
-CFLAGS= -Wall -Wextra -Werror -g2 -fsanitize=address
+CFLAGS= -Wall -Wextra -Werror
+# CFLAGS= -Wall -Wextra -Werror -g2 -fsanitize=address
 RM= rm -rf
 SERVER= server
 CLIENT= client
