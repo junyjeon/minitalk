@@ -16,29 +16,29 @@ int	g_flag;
 
 static void	send_sig(int pid, char *str, int byte)
 {
-	int	i;
-	int	bit;
-	int	tmp;
+	t_Client	cl;
+	int			i;
 
 	i = -1;
 	while (++i < byte)
 	{
-		bit = 0;
-		while (bit < 8)
+		cl.bit = 0;
+		while (cl.bit < 8)
 		{
-			if (g_flag == 1)
-				break ;
-			g_flag = 1;
-			tmp = (int)(str[i] >> (7 - bit) & 1);
-			if (tmp == 0)
+			if (g_flag == 0)
 			{
-				if (kill(pid, SIGUSR1) == -1)
-					print_error("Wrong pid");
+				g_flag = 1;
+				cl.tmp = (int)(str[i] >> (7 - cl.bit) & 1);
+				if (cl.tmp == 0)
+				{
+					if (kill(pid, SIGUSR1) == -1)
+						print_error("Wrong pid");
+				}
+				else
+					if (kill(pid, SIGUSR2) == -1)
+						print_error("Wrong pid");
+				++cl.bit;
 			}
-			else
-				if (kill(pid, SIGUSR2) == -1)
-					print_error("Wrong pid");
-			++bit;
 			usleep(1);
 		}
 	}

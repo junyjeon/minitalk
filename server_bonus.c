@@ -14,13 +14,18 @@
 
 t_info	g_server;
 
-void	reset_state(t_Client *cl, int pid)
+int	is_other_pid(t_Client *cl, int prev_pid, int current_pid)
 {
-	write(1, "interupt\n", 9);
-	kill(pid, SIGUSR2);
-	kill(g_server.pid, SIGUSR2);
-	g_server.pid = 0;
-	ft_memset(cl, 0, 1);
+	if (prev_pid != current_pid)
+	{
+		write(1, "interupt\n", 9);
+		kill(current_pid, SIGUSR2);
+		kill(prev_pid, SIGUSR2);
+		prev_pid = 0;
+		ft_memset(cl, 0, sizeof(cl));
+		return (1);
+	}
+	return (0);
 }
 
 void	handler(int sig, siginfo_t *info, void *context)
@@ -32,69 +37,26 @@ void	handler(int sig, siginfo_t *info, void *context)
 		return ;
 	if (g_server.pid == 0)
 		g_server.pid = info->si_pid;
-	if (g_server.pid != info->si_pid)
-	{
-		reset_state(&cl, info->si_pid);
+	if (is_other_pid(&cl, g_server.pid, info->si_pid))
 		return ;
-	}
 	if (sig == SIGUSR2)
 		cl.tmp |= (1 << (7 - cl.bit));
-	++(cl.bit);
-	if (cl.bit == 8)
+	if (++cl.bit == 8)
 	{
 		if (cl.tmp == '\0')
 		{
 			g_server.pid = 0;
-			cl.bit = 0;
-			cl.tmp = 0;
+			ft_memset(&cl, 0, sizeof(cl));
 			return ;
 		}
-		else
-			write(1, &(cl.tmp), 1);
-		cl.bit = 0;
-		cl.tmp = 0;
+		write(1, &(cl.tmp), 1);
+		ft_memset(&cl, 0, sizeof(cl));
 	}
 	g_server.flag = 1;
 }
 
-// void	handler(int sig, siginfo_t *info, void *context)
-// {
-// 	static int	tmp;
-// 	static int	bit;
-
-// 	(void)context;
-// 	if (info->si_pid == 0)
-// 		return ;
-// 	if (g_server.pid == 0)
-// 		g_server.pid = info->si_pid;
-// 	if (g_server.pid != info->si_pid)
-// 	{
-// 		reset_state(&tmp, &bit, info->si_pid);
-// 		return ;
-// 	}
-// 	if (sig == SIGUSR2)
-// 		tmp |= (1 << (7 - bit));
-// 	++bit;
-// 	if (bit == 8)
-// 	{
-// 		if (tmp == '\0')
-// 		{
-// 			g_server.pid = 0;
-// 			bit = 0;
-// 			tmp = 0;
-// 			return ;
-// 		}
-// 		else
-// 			write(1, &(tmp), 1);
-// 		bit = 0;
-// 		tmp = 0;
-// 	}
-// 	g_server.flag = 1;
-// }
-
 int	main(void)
 {
-	//
 	struct sigaction	act;
 
 	act.sa_sigaction = handler;
@@ -106,7 +68,7 @@ int	main(void)
 	ft_putchar('\n');
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
-	while (1) 
+	while (1)
 	{
 		if (g_server.flag == 1)
 		{

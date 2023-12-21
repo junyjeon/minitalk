@@ -17,8 +17,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 
-# define MAX_CLIENTS	10
-
 size_t	ft_strlen(const char *str);
 void	ft_putchar(char c);
 void	ft_putstr(char *str);

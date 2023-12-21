@@ -24,5 +24,18 @@ void	ft_putnbr(unsigned int n);
 int		ft_atoi(const char *str);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	print_error(char *str);
+void	*ft_memset(void *s, int c, size_t n);
+
+typedef struct s_Client
+{
+	int	tmp;
+	int	bit;
+}	t_Client;
+
+typedef struct s_info
+{
+	int	pid;
+	int	flag;
+}	t_info;
 
 #endif

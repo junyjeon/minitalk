@@ -69,26 +69,3 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	str[i] = '\0';
 	return (str);
 }
-
-int	get_utf8_length(char byte)
-{
-	if ((byte & 0x80) == 0)
-		return (1);
-	else if ((byte & 0xE0) == 0xC0)
-		return (2);
-	else if ((byte & 0xF0) == 0xE0)
-		return (3);
-	else if ((byte & 0xF8) == 0xF0)
-		return (4);
-	return (-1);
-}
-
-int	is_utf8_char(const char *buf, int buf_i)
-{
-	int	length;
-
-	length = get_utf8_length(buf[0]);
-	if (length == -1)
-		return (0);
-	return (buf_i >= length);
-}

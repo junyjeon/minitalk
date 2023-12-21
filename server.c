@@ -12,35 +12,45 @@
 
 #include "minitalk.h"
 
+t_info	g_server;
+
+void	reset_state(t_Client *cl, int pid)
+{
+	write(1, "interupt\n", 9);
+	kill(pid, SIGUSR2);
+	kill(g_server.pid, SIGUSR2);
+	g_server.pid = 0;
+	ft_memset(cl, 0, sizeof(cl));
+}
+
 void	handler(int sig, siginfo_t *info, void *context)
 {
-	static char	tmp;
-	static int	bit;
-	static int	cl_pid = 0;
-	static int 	working_signal = 0;
+	static t_Client	cl;
 
-	(void)info;
 	(void)context;
-	if (working_signal != 0 && cl_pid != 0 && cl_pid != info->si_pid)
+	if (info->si_pid == 0)
+		return ;
+	if (g_server.pid == 0)
+		g_server.pid = info->si_pid;
+	if (g_server.pid != info->si_pid)
 	{
-		kill(info->si_pid, SIGUSR2);
+		reset_state(&cl, info->si_pid);
 		return ;
 	}
 	if (sig == SIGUSR2)
-		tmp |= 1;
-	if (bit < 7)
-		tmp <<= 1;
-	bit++;
-	if (bit == 8)
+		cl.tmp |= (1 << (7 - cl.bit));
+	if (++cl.bit == 8)
 	{
-		kill(info->si_pid, SIGUSR1);
-		working_signal = 0;
-		cl_pid = 0;
-		write(1, &tmp, 1);
-		bit = 0;
-		tmp = 0;
+		if (cl.tmp == '\0')
+		{
+			g_server.pid = 0;
+			ft_memset(&cl, 0, sizeof(cl));
+			return ;
+		}
+		write(1, &(cl.tmp), 1);
+		ft_memset(&cl, 0, sizeof(cl));
 	}
-	kill(info->si_pid, SIGUSR1);
+	g_server.flag = 1;
 }
 
 int	main(void)
@@ -57,6 +67,13 @@ int	main(void)
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
 	while (1)
-		usleep(100);
+	{
+		if (g_server.flag == 1)
+		{
+			g_server.flag = 0;
+			if (kill(g_server.pid, SIGUSR1) == -1)
+				write(2, "<KILL ERROR>", 13);
+		}
+	}
 	return (0);
 }

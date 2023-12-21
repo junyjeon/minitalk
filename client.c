@@ -12,30 +12,39 @@
 
 #include "minitalk.h"
 
+int	g_flag;
+
 static void	send_sig(int pid, char *str, int byte)
 {
-	int	i;
-	int	bit;
-	int	bit_tmp;
+	t_Client	cl;
+	int			i;
 
 	i = -1;
 	while (++i < byte)
 	{
-		bit = 0;
-		while (bit < 8)
+		cl.bit = 0;
+		while (cl.bit < 8)
 		{
-			bit_tmp = (int)(str[i] >> (7 - bit) & 1);
-			if (bit_tmp == 0)
-				kill(pid, SIGUSR1);
-			else
-				kill(pid, SIGUSR2);
-			usleep(500);
-			bit++;
+			if (g_flag == 0)
+			{
+				g_flag = 1;
+				cl.tmp = (int)(str[i] >> (7 - cl.bit) & 1);
+				if (cl.tmp == 0)
+				{
+					if (kill(pid, SIGUSR1) == -1)
+						print_error("Wrong pid");
+				}
+				else
+					if (kill(pid, SIGUSR2) == -1)
+						print_error("Wrong pid");
+				++cl.bit;
+			}
+			usleep(1);
 		}
 	}
 }
 
-void	get_str(int pid, char *str)
+static void	post_str(int pid, char *str)
 {
 	int		byte;
 	char	*send;
@@ -45,8 +54,16 @@ void	get_str(int pid, char *str)
 		exit(1);
 	byte = (int)ft_strlen(send);
 	send_sig(pid, send, byte);
+	send_sig(pid, "\0", 1);
 	free(send);
-	exit(0);
+}
+
+static void	confirm(int sig)
+{
+	if (sig == SIGUSR1)
+		g_flag = 0;
+	else if (sig == SIGUSR2)
+		print_error("Error Occurred\n");
 }
 
 int	main(int argc, char **argv)
@@ -55,9 +72,12 @@ int	main(int argc, char **argv)
 
 	if (argc != 3)
 		print_error("Wrong number of Argument\n");
+	signal(SIGUSR1, confirm);
+	signal(SIGUSR2, confirm);
 	pid = ft_atoi(argv[1]);
-	get_str(pid, argv[2]);
-	while (1)
-		usleep(100);
+	if (pid <= 100 || 100000 <= pid)
+		print_error("PID ERROR");
+	post_str(pid, argv[2]);
+	write(1, &"Message transfer successful!\n", 29);
 	return (0);
 }
