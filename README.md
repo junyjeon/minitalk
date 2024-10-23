@@ -2,7 +2,7 @@
   <h1>📡 minitalk</h1>
   <p>42Seoul의 프로세스 간 통신(IPC) 프로젝트: UNIX 시그널을 이용한 데이터 교환</p>
 
-  <img src="assets/minitalk_review.jpg" alt="minitalk code review" width="800">
+  <img src="assets/07_minitalk_review.jpg" alt="minitalk code review" width="800">
 
   [![42 Score](https://img.shields.io/badge/Score-125%2F100-success?style=for-the-badge&logo=42)](https://github.com/your-username/minitalk)
   [![Norminette](https://img.shields.io/badge/Norminette-passing-brightgreen?style=for-the-badge)](https://github.com/42School/norminette)
