@@ -296,4 +296,3 @@ int sigemptyset(sigset_t *set);
 - [x] 에러 처리
 - [x] 유니코드 지원 (보너스)
 - [x] 전송 확인 시스템 (보너스)
-```
