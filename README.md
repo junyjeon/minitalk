@@ -1,12 +1,45 @@
 <div align="center">
   <h1>📡 minitalk</h1>
-  <p>42Seoul의 프로세스 간 통신(IPC) 프로젝트: UNIX 시그널을 이용한 데이터 교환</p>
+  <p>UNIX Signal 기반 클라이언트-서버 통신 프로그램</p>
 
-  <img src="assets/07_minitalk_review.jpg" alt="minitalk code review" width="800">
+  <img src="assets/minitalk_review.jpg" alt="Minitalk" width="800"/>
+  
+  <div>
+    <img src="https://img.shields.io/badge/Score-125%2F100-success?style=flat-square&logo=42" alt="42 Score"/>
+    <img src="https://img.shields.io/badge/Norminette-passing-brightgreen?style=flat-square" alt="Norminette"/>
+    <img src="https://img.shields.io/badge/Language-C-00599C?style=flat-square&logo=c" alt="Language"/>
+    <img src="https://img.shields.io/badge/Signal-UNIX-FCC624?style=flat-square&logo=linux" alt="Signal"/>
+  </div>
 
-  [![42 Score](https://img.shields.io/badge/Score-125%2F100-success?style=for-the-badge&logo=42)](https://github.com/your-username/minitalk)
-  [![Norminette](https://img.shields.io/badge/Norminette-passing-brightgreen?style=for-the-badge)](https://github.com/42School/norminette)
+  ### 주요 기능
+  - UNIX 시그널을 통한 프로세스 간 통신
+  - 비트 단위 문자열 전송
+  - 서버-클라이언트 양방향 통신
+  - 유니코드 문자 지원
+
+  ### 사용 기술
+  - UNIX 시그널 (SIGUSR1, SIGUSR2)
+  - 비트 연산
+  - 프로세스 관리
+  - 시그널 핸들링
 </div>
+```
+
+## 🚀 Quick Start
+```bash
+# 1. 저장소 클론
+git clone https://github.com/username/minitalk.git && cd minitalk
+
+# 2. 컴파일
+make
+
+# 3. 서버 실행 (새 터미널)
+./server
+# Server PID: 12345
+
+# 4. 클라이언트로 메시지 전송 (다른 터미널)
+./client 12345 "Hello, World!"
+```
 
 ## 📋 목차
 1. [프로젝트 소개](#-프로젝트-소개)
