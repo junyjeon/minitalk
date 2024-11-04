@@ -2,7 +2,7 @@
   <h1>📡 minitalk</h1>
   <p>UNIX Signal 기반 클라이언트-서버 통신 프로그램</p>
 
-  <img src="assets/minitalk_review.jpg" alt="Minitalk" width="800"/>
+  <img src="assets/07_minitalk_review.jpg" alt="Minitalk" width="800"/>
   
   <div>
     <img src="https://img.shields.io/badge/Score-125%2F100-success?style=flat-square&logo=42" alt="42 Score"/>
